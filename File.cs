@@ -69,7 +69,7 @@ namespace zgloszenia_mantis
         {
             while (true)
             {
-                Debug.WriteLine("Wykonuje porównanie czasu!");
+               // Debug.WriteLine("Wykonuje porównanie czasu!");
                 DateTime _dateTime = DateTime.Today;
                 if (Today != _dateTime)
                 {
@@ -117,10 +117,17 @@ namespace zgloszenia_mantis
                 {
                     Process.Start(new ProcessStartInfo { FileName = FilePath, UseShellExecute = true });
                 }
+                else
+                {
+                    var result = MessageBox.Show("Plik nie został utworzony, czy utworzyć plik?", "Brak pliku", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        SaveFile();
+                    }
+                }
             }
-            catch (System.Exception e)
-            {
-                Debug.WriteLine(e);
+            catch (Exception)
+            {     
                 MessageBox.Show("Błąd otwarcia pliku!", "Bład!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

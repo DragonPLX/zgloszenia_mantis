@@ -15,7 +15,7 @@ namespace zgloszenia_mantis
 
         private Label showTime;
 
-        private Stoper stoper;
+        private readonly Stoper stoper;
         public Button Start { get => start; set => start = value; } 
 
         public Button Reset { get => reset; set => reset = value; }
@@ -42,27 +42,24 @@ namespace zgloszenia_mantis
             FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel
             {
                 WrapContents = false,
-                AutoSize = true,
-                Anchor = AnchorStyles.None
+                Dock = DockStyle.Fill,
 
             };
 
             start = new Button
             {
-                Text = "Start",
-                MaximumSize = new Size(65, 50)
+                Text = "Start"
             };
 
             Stop = new Button
             {
-                Text = "Stop",
-                MaximumSize = new Size(65, 50)
+                Text = "Stop"
             };
 
             Reset = new Button
             {
-                Text = "Reset",
-                MaximumSize = new Size(65, 50)
+                Text = "Reset"
+                
             };
 
             ShowTime = new Label
@@ -75,8 +72,16 @@ namespace zgloszenia_mantis
             start.Click += (s, e) => stoper.StartStoper();
             Reset.Click += (s, e) => stoper.ResetStoper();
 
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+
+            flowLayoutPanel.Resize += (s, e) =>
+            {
+                int buttonWidth = flowLayoutPanel.ClientSize.Width / 3 - 5;
+                start.Width = buttonWidth;
+                stop.Width = buttonWidth;
+                reset.Width = buttonWidth; 
+            };
 
             flowLayoutPanel.Controls.Add(start);
             flowLayoutPanel.Controls.Add(Stop);

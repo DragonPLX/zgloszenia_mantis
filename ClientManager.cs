@@ -13,13 +13,15 @@ namespace zgloszenia_mantis
 {
     public class ClientManager
     {
+        public static ClientManager Instance { get; private set; } = new ClientManager();
+
         public event EventHandler ClientsChanged;
 
         public List<string> Clients { get; private set; } = new List<string>();
 
         private readonly string _path = "clients.txt";
 
-        public ClientManager()
+        private ClientManager()
         {
             GenerateAndLoadingClients();
         }
@@ -32,7 +34,7 @@ namespace zgloszenia_mantis
                     Clients.Add(client);
                     Clients.Sort(StringComparer.OrdinalIgnoreCase);
                     ClientsChanged?.Invoke(this, EventArgs.Empty);
-
+                    Debug.WriteLine("Zdarzenie ClientsChanged zostało wywołane.");
                     try
                     {
                         SaveClientsToFile();
@@ -64,6 +66,7 @@ namespace zgloszenia_mantis
                     Clients.Remove(client);
                     Clients.Sort(StringComparer.OrdinalIgnoreCase);
                     ClientsChanged?.Invoke(this, EventArgs.Empty);
+                    Debug.WriteLine("Zdarzenie ClientsChanged zostało wywołane.");
 
                     try
                     {

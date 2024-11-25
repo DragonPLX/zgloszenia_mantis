@@ -11,7 +11,7 @@ namespace zgloszenia_mantis
 
     public class Frame : TabPage
     {
-        TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
+        readonly TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
         {
             ColumnCount = 2,
             RowCount = 2,

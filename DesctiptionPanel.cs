@@ -18,11 +18,10 @@ namespace zgloszenia_mantis
         {
             
             GenerateLayout();
-            description.ClientManager.ClientsChanged += (o, e) =>
+            ClientManager.Instance.ClientsChanged += (o, e) =>
             {
-                Debug.WriteLine("Przyjąłem, podmieniam");
                 comboBox.DataSource = null;
-                comboBox.DataSource = description.ClientManager.Clients;
+                comboBox.DataSource = ClientManager.Instance.Clients;
             };
         }
 
@@ -42,7 +41,7 @@ namespace zgloszenia_mantis
 
             comboBox = new ComboBox
             {
-                DataSource = description.ClientManager.Clients,
+                DataSource = ClientManager.Instance.Clients,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Dock = DockStyle.Fill
 

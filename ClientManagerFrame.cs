@@ -12,9 +12,7 @@ namespace zgloszenia_mantis
 {
     public class ClientManagerForm : Form
     {
-        
-
-        readonly ClientManager clientManager = new ClientManager();
+  
         ComboBox comboBox;
         TextBox textBox;
         public ClientManagerForm()
@@ -34,7 +32,7 @@ namespace zgloszenia_mantis
 
             comboBox = new ComboBox 
             {
-                DataSource = clientManager.Clients,
+                DataSource = ClientManager.Instance.Clients,
                 Dock = DockStyle.Fill,
                 DropDownStyle = ComboBoxStyle.DropDownList,
             };
@@ -65,14 +63,23 @@ namespace zgloszenia_mantis
                 Text = "Anuluj"
             };
 
+            flowLayoutPanel.Resize += (o, e) =>
+            {
+                int buttonWidth = flowLayoutPanel.ClientSize.Width / 3 - 5;
+                removeClient.Width = buttonWidth;
+                addClient.Width = buttonWidth;
+                cancel.Width = buttonWidth;
+            };
+
+
             removeClient.Click += (o, e) => 
             {
-                clientManager.RemoveClientFromList(comboBox.SelectedItem.ToString());
+                ClientManager.Instance.RemoveClientFromList(comboBox.SelectedItem.ToString());
                 RefreshData();
             };
             addClient.Click += (o, e) => 
             {
-                clientManager.AddClientToList(textBox.Text);
+                ClientManager.Instance.AddClientToList(textBox.Text);
                 RefreshData();
             };
             cancel.Click += (o, e) => Close();
@@ -91,7 +98,7 @@ namespace zgloszenia_mantis
         private void RefreshData()
         {
             comboBox.DataSource = null;
-            comboBox.DataSource = clientManager.Clients;
+            comboBox.DataSource = ClientManager.Instance.Clients;
             textBox.Text = "";
         }
 

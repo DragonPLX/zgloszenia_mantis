@@ -12,10 +12,6 @@ namespace zgloszenia_mantis
     public class Description 
     {
 
-        public ClientManager ClientManager { get; private set; } = new ClientManager();
-        
-
-
         public Description()
         {
             
