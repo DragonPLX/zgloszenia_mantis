@@ -8,54 +8,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace zgloszenia_mantis
 {
-    public class File : Panel
+    public class File
     {
-        private string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        
-        private static DateTime today = DateTime.Today;
-        
-        private string monthFolder = today.ToString("yyyy-MM");
+        public string DefaultPath { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        private Button saveFile, changePath, openFile;
-  
-        private string filePath;
+        public static DateTime Today { get; private set; } = DateTime.Today;
 
-        readonly TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
+        public string MonthFolder { get; private set; } = Today.ToString("yyyy-MM");
+
+        public string FilePath { get; set; }
+
+        private readonly FilePanel filePanel;
+
+        public readonly string pathFile = "Path.txt";
+
+        public File(FilePanel _filePanel)
         {
-            Dock = DockStyle.Fill,
-            RowCount = 3,
-            ColumnCount = 2  
-        };
-
-        readonly Label labelPath = new Label
-        {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            MaximumSize = new Size(255,0)
-        };
-        
-        readonly string _pathFile = "Path.txt";
-        public File()
-        {    
+            filePanel = _filePanel;
             LoadPath();
-            GenerateLayout();
             _ = IntializeAsync();
         }
 
         private void LoadPath()
         {
-
-            if (!System.IO.File.Exists(_pathFile))
+            if (!System.IO.File.Exists(pathFile))
             {
                 try
                 {
-                    StreamWriter _writer = new StreamWriter(_pathFile);
-                    _writer.WriteLine(path);
+                    StreamWriter _writer = new StreamWriter(pathFile);
+                    _writer.WriteLine(DefaultPath);
                     _writer.Close();
-                    Debug.WriteLine($"Zapisałem plik ze ścieżką: {_pathFile}");
+                    Debug.WriteLine($"Zapisałem plik ze ścieżką: {pathFile}");
                 }
                 catch (Exception)
                 {
@@ -65,63 +50,14 @@ namespace zgloszenia_mantis
 
             try
             {
-                StreamReader _reader = new StreamReader(_pathFile);
-                path = _reader.ReadLine();
+                StreamReader _reader = new StreamReader(pathFile);
+                DefaultPath = _reader.ReadLine();
                 _reader.Close();
             }
             catch (Exception)
             {
                 MessageBox.Show("Błąd przy wczytywaniu ścieżki z pliku!", "Błąd!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void UpdateLabelPath()
-        {
-            filePath = Path.Combine(path, monthFolder, today.ToString("yyyy-MM-dd") + ".txt");
-            labelPath.Text = filePath;   
-        }
-
-        private void GenerateLayout()
-        {
-
-            UpdateLabelPath();
-            GenerateButton();
-
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            
-            tableLayoutPanel.Controls.Add(labelPath, 0, 0);
-            
-            tableLayoutPanel.Controls.Add(saveFile, 1, 1);
-            tableLayoutPanel.Controls.Add(openFile, 0, 2);
-            tableLayoutPanel.Controls.Add(changePath, 0, 1);
-            tableLayoutPanel.SetColumnSpan(labelPath, 2);
-            tableLayoutPanel.SetColumnSpan(openFile, 2);
-
-            Controls.Add(tableLayoutPanel);
-        }
-
-        private void GenerateButton()
-        {
-            saveFile = new Button
-            {
-                Text = "Utwórz plik",
-                Dock = DockStyle.Fill
-            };
-            saveFile.Click += (s, e) => SaveFile();
-            changePath = new Button
-            {
-                Text = "Zmień",
-                Dock = DockStyle.Fill
-            };
-            changePath.Click += (s, e) => ChangePath();
-            openFile = new Button
-            {
-                Text = "Otwórz plik",
-                Dock = DockStyle.Fill
-            };
-            openFile.Click += (s, e) => OpenFile();
         }
 
         private async Task IntializeAsync()
@@ -135,11 +71,11 @@ namespace zgloszenia_mantis
             {
                 Debug.WriteLine("Wykonuje porównanie czasu!");
                 DateTime _dateTime = DateTime.Today;
-                if (today != _dateTime)
+                if (Today != _dateTime)
                 {
-                    today = _dateTime;
-                    monthFolder = today.ToString("yyyy-MM");
-                    UpdateLabelPath();
+                    Today = _dateTime;
+                    MonthFolder = Today.ToString("yyyy-MM");
+                    filePanel.UpdateLabelPath();
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(15));
@@ -148,17 +84,17 @@ namespace zgloszenia_mantis
 
         public void SaveFile()
         {
-            if (!Directory.Exists(Path.Combine(path, monthFolder)))
+            if (!Directory.Exists(Path.Combine(DefaultPath, MonthFolder)))
             {
-                Directory.CreateDirectory(Path.Combine(path, monthFolder));
+                Directory.CreateDirectory(Path.Combine(DefaultPath, MonthFolder));
             }
 
             try
             {
-                if (!System.IO.File.Exists(filePath))
+                if (!System.IO.File.Exists(FilePath))
                 {
-                    System.IO.File.Create(filePath).Dispose();
-                    Debug.WriteLine(filePath);
+                    System.IO.File.Create(FilePath).Dispose();
+                    Debug.WriteLine(FilePath);
                     MessageBox.Show("Udało się zapisać plik.");
                 }
                 else
@@ -177,9 +113,9 @@ namespace zgloszenia_mantis
         {
             try
             {
-                if (System.IO.File.Exists(filePath))
+                if (System.IO.File.Exists(FilePath))
                 {
-                    Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo { FileName = FilePath, UseShellExecute = true });
                 }
             }
             catch (System.Exception e)
@@ -194,19 +130,17 @@ namespace zgloszenia_mantis
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                path = dialog.SelectedPath;
+                DefaultPath = dialog.SelectedPath;
                 try
                 {
-                    StreamWriter stream = new StreamWriter(_pathFile);
-                    stream.Write(path);
+                    StreamWriter stream = new StreamWriter(pathFile);
+                    stream.Write(DefaultPath);
                     stream.Close();
-                    UpdateLabelPath();
                 }
-                catch (Exception) 
+                catch (Exception)
                 {
                     MessageBox.Show("Błąd przy zapisie zmiany katalogu!", "Bład!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
         }
     }
