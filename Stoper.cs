@@ -12,9 +12,9 @@ namespace zgloszenia_mantis
     public class Stoper 
     {
         private int hour = 0, minute = 0, second = 0;
-        private static List<Stoper> stopers = new List<Stoper>();
+        private readonly static List<Stoper> stopers = new List<Stoper>();
 
-        private StoperPanel stoperPanel;
+        private readonly StoperPanel stoperPanel;
         private System.Timers.Timer timer;
 
         public int Hour { get => hour; private set => hour = value; }
@@ -81,7 +81,7 @@ namespace zgloszenia_mantis
             }));
         }
 
-        public string GetTime()
+        public string GetTimeToString()
         {
             int _hour , _minute;
             if (second >= 30)
@@ -102,7 +102,8 @@ namespace zgloszenia_mantis
                 _hour = hour; 
                 _minute = minute;
             }
-            return $"{_hour:2D}:{_minute:2D}";
+            
+            return $"{_hour:D2}:{_minute:D2}";
 
         }
 
@@ -125,6 +126,8 @@ namespace zgloszenia_mantis
                 }
             }
         }
+
+       
 
     }
 }

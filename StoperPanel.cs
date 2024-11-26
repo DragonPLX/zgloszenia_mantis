@@ -15,7 +15,7 @@ namespace zgloszenia_mantis
 
         private Label showTime;
 
-        private readonly Stoper stoper;
+        public readonly Stoper stoper;
         public Button Start { get => start; set => start = value; } 
 
         public Button Reset { get => reset; set => reset = value; }
@@ -66,7 +66,8 @@ namespace zgloszenia_mantis
             {
                 Text = $"{stoper.Hour:D2}:{stoper.Minute:D2}:{stoper.Second:D2}",
                 Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font(Font.FontFamily, 16)
             };
 
             start.Click += (s, e) => stoper.StartStoper();

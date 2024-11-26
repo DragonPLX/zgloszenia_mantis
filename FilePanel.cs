@@ -60,8 +60,8 @@ namespace zgloszenia_mantis
 
         public void UpdateLabelPath()
         {
-            file.FilePath = Path.Combine(file.DefaultPath, file.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
-            labelPath.Text = file.FilePath;
+            File.FilePath = Path.Combine(file.DefaultPath, file.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
+            labelPath.Text = File.FilePath;
         }
         private void GenerateButton()
         {

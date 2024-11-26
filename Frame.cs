@@ -11,6 +11,11 @@ namespace zgloszenia_mantis
 
     public class Frame : TabPage
     {
+        readonly Options options;
+        readonly StoperPanel stoperPanel;
+        readonly FilePanel filePanel;
+        readonly DescriptionPanel descriptionPanel;
+
         readonly TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
         {
             ColumnCount = 2,
@@ -20,6 +25,28 @@ namespace zgloszenia_mantis
         };
         public Frame()
         {
+            options = new Options
+            {
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            stoperPanel = new StoperPanel
+            {
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            filePanel = new FilePanel
+            {
+                Anchor = AnchorStyles.Left | AnchorStyles.Right,
+                Margin = new Padding(10, 0, 10, 0)
+            };
+            descriptionPanel = new DescriptionPanel
+            {
+                Dock = DockStyle.Fill
+            };
+
+            descriptionPanel.SaveDataButtonClicked += BindingDataGetTime;
 
             for (int i = 0; i < tableLayoutPanel.ColumnCount; i++)
             {
@@ -32,30 +59,22 @@ namespace zgloszenia_mantis
                 tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100f / tableLayoutPanel.RowCount));
             }
 
+            tableLayoutPanel.Controls.Add(options, 0, 0);
+
+            tableLayoutPanel.Controls.Add(stoperPanel, 1, 0);
+
+            tableLayoutPanel.Controls.Add(filePanel, 0, 1);
+
+            tableLayoutPanel.Controls.Add(descriptionPanel, 1, 1);
+
             Controls.Add(tableLayoutPanel);
-          
-            tableLayoutPanel.Controls.Add(new Options 
-            {
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.FixedSingle
-            }, 0, 0);
-
-            tableLayoutPanel.Controls.Add(new StoperPanel 
-            {
-                Dock = DockStyle.Fill,
-                BorderStyle = BorderStyle.FixedSingle
-            }, 1, 0);
-
-            tableLayoutPanel.Controls.Add(new FilePanel 
-            {
-                Anchor = AnchorStyles.Left | AnchorStyles.Right,
-                Margin = new Padding(10,0,10,0)
-            }, 0, 1);
-
-            tableLayoutPanel.Controls.Add(new DescriptionPanel
-            { 
-                Dock = DockStyle.Fill 
-            }, 1, 1);
+        }
+    
+        public void BindingDataGetTime(object o, EventArgs e)
+        {
+            descriptionPanel.description.Time = stoperPanel.stoper.GetTimeToString();
+            if(descriptionPanel.IsFile)
+                stoperPanel.stoper.ResetStoper();
         }
     }
 }

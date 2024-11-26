@@ -18,11 +18,16 @@ namespace zgloszenia_mantis
 
         public string MonthFolder { get; private set; } = Today.ToString("yyyy-MM");
 
-        public string FilePath { get; set; }
+        public static string FilePath { get; set; }
 
         private readonly FilePanel filePanel;
 
         public readonly string pathFile = "Path.txt";
+
+        public File()
+        {
+            LoadPath();
+        }
 
         public File(FilePanel _filePanel)
         {

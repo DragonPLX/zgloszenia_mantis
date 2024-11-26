@@ -10,9 +10,9 @@ namespace zgloszenia_mantis
 {
     public class MainFrame : TabControl
     {
-        Frame tab1 = new Frame { Text = "Zad 1" };
-        TabPage plusTab = new TabPage { Text = "+" };
-        TabPage minusTab = new TabPage { Text = "-" };
+        readonly Frame tab1 = new Frame { Text = "Zad 1" };
+        readonly TabPage plusTab = new TabPage { Text = "+" };
+        readonly TabPage minusTab = new TabPage { Text = "-" };
 
         int selectedTabIndex = 0;
         public MainFrame() 
@@ -31,19 +31,27 @@ namespace zgloszenia_mantis
                 Frame newTab = new Frame { Text = $"Zad {TabCount - 1}" };
                 TabPages.Insert(TabCount-2, newTab);
                 e.Cancel = true;
+                selectedTabIndex = TabCount - 2;
+                SelectedIndex = selectedTabIndex;
+
             }
             else if(tabPage == minusTab) {
-
-                TabPages.RemoveAt(selectedTabIndex);
-                e.Cancel = true;
-                if(selectedTabIndex == TabCount - 2)
+                if (TabCount > 2 && selectedTabIndex>=0) { 
+                    TabPages.RemoveAt(selectedTabIndex);
+                    e.Cancel = true;
+                    if(selectedTabIndex == TabCount - 2)
+                    {
+                        Debug.WriteLine("Usuwam zakładkę ostatnią");
+                        selectedTabIndex = TabCount - 3;
+                        SelectedIndex = selectedTabIndex;
+                    }
+                }
+                else
                 {
-                    Debug.WriteLine("Usuwam zakładkę ostatnią");
-                    selectedTabIndex--;
-                    SelectedIndex = selectedTabIndex;
+                    MessageBox.Show("Chcesz usunąć błędną zakładkę!","Błąd",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
+            else 
             {
                 Debug.WriteLine("Ustawiam!");
                 selectedTabIndex = e.TabPageIndex;

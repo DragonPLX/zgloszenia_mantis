@@ -10,9 +10,12 @@ namespace zgloszenia_mantis
 {
     public class DescriptionPanel : Panel
     {
-        
-        readonly Description description = new Description();
 
+        public event EventHandler SaveDataButtonClicked;
+        
+        public readonly Description description = new Description();
+
+        public bool IsFile { get; private set; }
         ComboBox comboBox;
         public DescriptionPanel()
         {
@@ -62,8 +65,6 @@ namespace zgloszenia_mantis
                 WrapContents = false
             };
 
-         
-
             Button changeClients = new Button
             {
                 Text = "Zmiana klientów",
@@ -76,7 +77,18 @@ namespace zgloszenia_mantis
                 
             };
 
-            changeClients.Click += (o, e) => description.ChangeClients(); 
+            changeClients.Click += (o, e) => description.ChangeClients();
+            saveData.Click += (o, e) => 
+            { 
+                SaveDataButtonClicked?.Invoke(this, e);
+                description.Client = comboBox.SelectedItem.ToString();
+                description.DescriptionOfReports = textBox.Text;
+                IsFile = description.SaveData();
+                if (IsFile) { 
+                    comboBox.SelectedIndex = 0;
+                    textBox.Clear();
+                }
+            };
 
             flowLayoutPanel.Controls.Add(changeClients);
             flowLayoutPanel.Controls.Add(saveData);
