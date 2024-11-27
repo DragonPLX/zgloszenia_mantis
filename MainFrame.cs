@@ -10,58 +10,76 @@ namespace zgloszenia_mantis
 {
     public class MainFrame : TabControl
     {
-        readonly Frame tab1 = new Frame { Text = "Zad 1" };
-        readonly TabPage plusTab = new TabPage { Text = "+" };
-        readonly TabPage minusTab = new TabPage { Text = "-" };
+        readonly Frame tab1 = new Frame { Text = "Zad 1", Name="Frame" };
+        readonly TabPage plusTab = new TabPage { Text = "+", Name="plusTab" };
+        readonly TabPage minusTab = new TabPage { Text = "-", Name="minusTab" };
 
-        int selectedTabIndex = 0;
+        TabPage _selectedTab;
+        int _selectedTabIndexMinusOne;
         public MainFrame() 
         {
             Controls.Add(tab1);
             Controls.Add(plusTab);
             Controls.Add(minusTab);
-            Selecting += TabClick;
+            SelectedIndex = 0;
+            _selectedTab = SelectedTab;
+            
+            SelectedIndexChanged += TabClick;
         }
 
-        private void TabClick(object sender, TabControlCancelEventArgs e)
+
+        private void TabClick(object sender, EventArgs e)
         {
-            TabPage tabPage = e.TabPage;
+            TabPage tabPage = SelectedTab;
 
-            if(tabPage == plusTab) { 
-                Frame newTab = new Frame { Text = $"Zad {TabCount - 1}" };
-                TabPages.Insert(TabCount-2, newTab);
-                e.Cancel = true;
-                selectedTabIndex = TabCount - 2;
-                SelectedIndex = selectedTabIndex;
-
-            }
-            else if(tabPage == minusTab) {
-                if (TabCount > 2 && selectedTabIndex>=0) { 
-                    TabPages.RemoveAt(selectedTabIndex);
-                    e.Cancel = true;
-                    if(selectedTabIndex == TabCount - 2)
-                    {
-                        Debug.WriteLine("Usuwam zakładkę ostatnią");
-                        selectedTabIndex = TabCount - 3;
-                        SelectedIndex = selectedTabIndex;
-                    }
+            if (tabPage != null) {
+                if(tabPage.Name == "plusTab")
+                {
+                    AddNewTab();
+                }
+                else if(tabPage.Name == "minusTab")
+                {
+                    RemoveCurrentTab();
                 }
                 else
                 {
-                    MessageBox.Show("Chcesz usunąć błędną zakładkę!","Błąd",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _selectedTab = SelectedTab;
+                    _selectedTabIndexMinusOne = SelectedIndex - 1;
+                    Debug.WriteLine(_selectedTab);
                 }
             }
-            else 
-            {
-                Debug.WriteLine("Ustawiam!");
-                selectedTabIndex = e.TabPageIndex;
-            }
 
-            
-            Debug.WriteLine(selectedTabIndex);
         }
 
-        
+        private void AddNewTab()
+        {
+            Frame newTab = new Frame { Text = $"Zad {TabCount - 1}" };
+            TabPages.Insert(TabCount - 2, newTab);
+            if (Options.IsYesStopOthersStopers) {
+                newTab.Stoper.stoper.StopAllOtherStopers();
+            }
+            newTab.Stoper.stoper.StartStoper();
+            SelectedTab = newTab;
+        }
+
+        private void RemoveCurrentTab()
+        {
+            TabPage tabPage = _selectedTab;
+            
+            if (tabPage != null && tabPage.Name != "plusTab" && tabPage.Name != "minusTab") {
+            
+                TabPages.Remove(tabPage);
+                if(TabCount ==2)
+                    SelectedIndex = -1;
+                else
+                    SelectedIndex = _selectedTabIndexMinusOne;
+            }
+            else
+            {
+                MessageBox.Show("Chcesz usunąć błędną zakładkę!", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }   
 
     }
 }

@@ -13,6 +13,7 @@ namespace zgloszenia_mantis
     {
         readonly Options options;
         readonly StoperPanel stoperPanel;
+        public StoperPanel Stoper { get { return stoperPanel; } }
         readonly FilePanel filePanel;
         readonly DescriptionPanel descriptionPanel;
 
@@ -73,7 +74,7 @@ namespace zgloszenia_mantis
         public void BindingDataGetTime(object o, EventArgs e)
         {
             descriptionPanel.description.Time = stoperPanel.stoper.GetTimeToString();
-            if(descriptionPanel.IsFile)
+            if (descriptionPanel.IsFile) 
                 stoperPanel.stoper.ResetStoper();
         }
     }
