@@ -83,7 +83,7 @@ namespace zgloszenia_mantis
                     filePanel.UpdateLabelPath();
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(2));
+                await Task.Delay(TimeSpan.FromSeconds(30));
             }
         }
 
