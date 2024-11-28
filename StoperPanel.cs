@@ -16,8 +16,7 @@ namespace zgloszenia_mantis
         private Label showTime;
 
         public readonly Stoper stoper;
-        public Button Start { get => start; set => start = value; } 
-
+        public Button Start { get => start; set => start = value; }
         public Button Reset { get => reset; set => reset = value; }
         public Button Stop { get => stop; set => stop = value; }
         public Label ShowTime { get => showTime; set => showTime = value; }
@@ -71,6 +70,7 @@ namespace zgloszenia_mantis
             };
 
             start.Click += (s, e) => stoper.StartStoper();
+
             Reset.Click += (s, e) => stoper.ResetStoper();
 
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75F));

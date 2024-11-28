@@ -12,11 +12,13 @@ namespace zgloszenia_mantis
     {
 
         public event EventHandler SaveDataButtonClicked;
+        public event EventHandler ResetStoperChanging;
         
         public readonly Description description = new Description();
 
         public bool IsFile { get; private set; }
         ComboBox comboBox;
+        TextBox textBox;
         public DescriptionPanel()
         {
             
@@ -50,7 +52,7 @@ namespace zgloszenia_mantis
 
             };
 
-            TextBox textBox = new TextBox
+            textBox = new TextBox
             {
                 Dock = DockStyle.Fill,
                 Multiline = true,
@@ -78,17 +80,7 @@ namespace zgloszenia_mantis
             };
 
             changeClients.Click += (o, e) => description.ChangeClients();
-            saveData.Click += (o, e) => 
-            { 
-                SaveDataButtonClicked?.Invoke(this, e);
-                description.Client = comboBox.SelectedItem.ToString();
-                description.DescriptionOfReports = textBox.Text;
-                IsFile = description.SaveData();
-                if (IsFile) { 
-                    comboBox.SelectedIndex = 0;
-                    textBox.Clear();
-                }
-            };
+            saveData.Click += SavedClicked;
 
             flowLayoutPanel.Controls.Add(changeClients);
             flowLayoutPanel.Controls.Add(saveData);
@@ -106,6 +98,19 @@ namespace zgloszenia_mantis
             Controls.Add(tableLayoutPanel);
 
 
+        }
+        public void SavedClicked(object sender, EventArgs e)
+        {
+            SaveDataButtonClicked?.Invoke(sender, e);
+            description.Client = comboBox.SelectedItem.ToString();
+            description.DescriptionOfReports = textBox.Text;
+            IsFile = description.SaveData();
+            if (IsFile)
+            {
+                ResetStoperChanging?.Invoke(sender,e);
+                comboBox.SelectedIndex = 0;
+                textBox.Clear();
+            }
         }
 
         
