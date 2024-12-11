@@ -24,10 +24,12 @@ namespace zgloszenia_mantis
         {
             
             GenerateLayout();
-            clientManager.ClientsChanged += (o, e) =>
+            ClientManager.ClientsChanged += (o, e) =>
             {
+                Debug.WriteLine("Ustawiam comboBoxa");
                 comboBox.DataSource = null;
                 comboBox.DataSource = clientManager.Clients;
+                Refresh();
             };
         }
 
@@ -80,7 +82,7 @@ namespace zgloszenia_mantis
                 
             };
 
-            changeClients.Click += (o, e) => description.ChangeClients();
+            changeClients.Click += (o, e) => description.ChangeClients(clientManager);
             saveData.Click += SavedClicked;
 
             flowLayoutPanel.Controls.Add(changeClients);

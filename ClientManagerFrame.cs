@@ -16,9 +16,10 @@ namespace zgloszenia_mantis
         ComboBox comboBox;
         TextBox textBox;
 
-        ClientManager clientManager = new ClientManager();
-        public ClientManagerForm()
+        ClientManager clientManager;
+        public ClientManagerForm(ClientManager clientManager)
         {
+           this.clientManager = clientManager;
            GenerateLayout();  
         }
 

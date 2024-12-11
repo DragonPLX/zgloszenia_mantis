@@ -26,6 +26,7 @@ namespace zgloszenia_mantis
         };
         public Frame()
         {
+            
             options = new Options
             {
                 Dock = DockStyle.Fill,

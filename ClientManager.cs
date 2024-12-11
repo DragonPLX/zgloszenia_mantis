@@ -14,7 +14,7 @@ namespace zgloszenia_mantis
     public class ClientManager
     {
 
-        public event EventHandler ClientsChanged;
+        public static event EventHandler ClientsChanged;
 
         public List<string> Clients { get; private set; } = new List<string>();
 
@@ -22,6 +22,7 @@ namespace zgloszenia_mantis
 
         public ClientManager()
         {
+            if(Clients.Count == 0)
             GenerateAndLoadingClients();
         }
 
@@ -33,7 +34,7 @@ namespace zgloszenia_mantis
                     Clients.Add(client);
                     Clients.Sort(StringComparer.OrdinalIgnoreCase);
                     ClientsChanged?.Invoke(this, EventArgs.Empty);
-                    Debug.WriteLine("Zdarzenie ClientsChanged zostało wywołane.");
+                    
                     try
                     {
                         SaveClientsToFile();
@@ -86,7 +87,7 @@ namespace zgloszenia_mantis
                 MessageBox.Show("Błąd nazwa klienta jest pusta", "Błąd nazwy klienta", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void SaveClientsToFile()
+        private  void SaveClientsToFile()
         {
             StreamWriter writer = new StreamWriter(_path);
             StringBuilder stringBuilder = new StringBuilder();

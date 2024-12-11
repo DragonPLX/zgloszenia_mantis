@@ -52,10 +52,10 @@ namespace zgloszenia_mantis
 
         }
 
-        public void ChangeClients()
+        public void ChangeClients(ClientManager clientManager)
         {
 
-            clientManagerForm = new ClientManagerForm
+            clientManagerForm = new ClientManagerForm(clientManager)
             {
                 Size = new Size(350, 125),
                 StartPosition = FormStartPosition.CenterScreen,
