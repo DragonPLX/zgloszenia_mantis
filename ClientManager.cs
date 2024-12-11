@@ -13,7 +13,6 @@ namespace zgloszenia_mantis
 {
     public class ClientManager
     {
-        public static ClientManager Instance { get; private set; } = new ClientManager();
 
         public event EventHandler ClientsChanged;
 
@@ -21,7 +20,7 @@ namespace zgloszenia_mantis
 
         private readonly string _path = "clients.txt";
 
-        private ClientManager()
+        public ClientManager()
         {
             GenerateAndLoadingClients();
         }

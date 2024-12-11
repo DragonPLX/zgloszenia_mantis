@@ -16,6 +16,7 @@ namespace zgloszenia_mantis
         
         public readonly Description description = new Description();
 
+        ClientManager clientManager = new ClientManager();
         public bool IsFile { get; private set; }
         ComboBox comboBox;
         TextBox textBox;
@@ -23,10 +24,10 @@ namespace zgloszenia_mantis
         {
             
             GenerateLayout();
-            ClientManager.Instance.ClientsChanged += (o, e) =>
+            clientManager.ClientsChanged += (o, e) =>
             {
                 comboBox.DataSource = null;
-                comboBox.DataSource = ClientManager.Instance.Clients;
+                comboBox.DataSource = clientManager.Clients;
             };
         }
 
@@ -46,7 +47,7 @@ namespace zgloszenia_mantis
 
             comboBox = new ComboBox
             {
-                DataSource = ClientManager.Instance.Clients,
+                DataSource = clientManager.Clients,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Dock = DockStyle.Fill
 

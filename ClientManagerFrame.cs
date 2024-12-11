@@ -15,6 +15,8 @@ namespace zgloszenia_mantis
   
         ComboBox comboBox;
         TextBox textBox;
+
+        ClientManager clientManager = new ClientManager();
         public ClientManagerForm()
         {
            GenerateLayout();  
@@ -32,7 +34,7 @@ namespace zgloszenia_mantis
 
             comboBox = new ComboBox 
             {
-                DataSource = ClientManager.Instance.Clients,
+                DataSource = clientManager.Clients,
                 Dock = DockStyle.Fill,
                 DropDownStyle = ComboBoxStyle.DropDownList,
             };
@@ -74,12 +76,12 @@ namespace zgloszenia_mantis
 
             removeClient.Click += (o, e) => 
             {
-                ClientManager.Instance.RemoveClientFromList(comboBox.SelectedItem.ToString());
+                clientManager.RemoveClientFromList(comboBox.SelectedItem.ToString());
                 RefreshData();
             };
             addClient.Click += (o, e) => 
             {
-                ClientManager.Instance.AddClientToList(textBox.Text);
+                clientManager.AddClientToList(textBox.Text);
                 RefreshData();
             };
             cancel.Click += (o, e) => Close();
@@ -98,7 +100,7 @@ namespace zgloszenia_mantis
         private void RefreshData()
         {
             comboBox.DataSource = null;
-            comboBox.DataSource = ClientManager.Instance.Clients;
+            comboBox.DataSource = clientManager.Clients;
             textBox.Text = "";
         }
 
