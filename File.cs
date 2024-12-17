@@ -82,7 +82,7 @@ namespace zgloszenia_mantis
                     MonthFolder = Today.ToString("yyyy-MM");
                     filePanel.UpdateLabelPath();
                 }
-
+                filePanel.UpdateLabelPath();
                 await Task.Delay(TimeSpan.FromSeconds(30));
             }
         }

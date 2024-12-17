@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,9 +21,10 @@ namespace zgloszenia_mantis
             Activated += (s, e) => Focus();
             Controls.Add(new MainFrame { Dock = DockStyle.Fill});
             Size = new Size(600, 550);
-            
 
         }
+
        
+
     }
 }
