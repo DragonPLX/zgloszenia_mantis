@@ -12,11 +12,11 @@ namespace zgloszenia_mantis
 {
     public class File
     {
-        public string DefaultPath { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static string DefaultPath { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public static DateTime Today { get; private set; } = DateTime.Today;
 
-        public string MonthFolder { get; private set; } = Today.ToString("yyyy-MM");
+        public static string MonthFolder { get; private set; } = Today.ToString("yyyy-MM");
 
         public static string FilePath { get; set; }
 
@@ -33,7 +33,7 @@ namespace zgloszenia_mantis
         {
             filePanel = _filePanel;
             LoadPath();
-            _ = IntializeAsync();
+            _ = InitializeAsync();
         }
 
         private void LoadPath()
@@ -65,16 +65,16 @@ namespace zgloszenia_mantis
             }
         }
 
-        private async Task IntializeAsync()
+        public async Task InitializeAsync()
         {
             await RefreshDate();
         }
 
-        public async Task RefreshDate()
+        private async Task RefreshDate()
         {
             while (true)
             {
-               // Debug.WriteLine("Wykonuje porównanie czasu!");
+                //Debug.WriteLine("Wykonuje porównanie czasu!");
                 DateTime _dateTime = DateTime.Today;
                 if (Today != _dateTime)
                 {

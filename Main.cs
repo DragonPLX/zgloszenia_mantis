@@ -22,9 +22,45 @@ namespace zgloszenia_mantis
             Controls.Add(new MainFrame { Dock = DockStyle.Fill});
             Size = new Size(600, 550);
 
+            SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
 
-       
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        {
+            if (!IsScreenVisible(this))
+            {
+                CenterWindow();
+            }
+
+            
+        }
+        private bool IsScreenVisible(Form form)
+        {
+            foreach (var screen in Screen.AllScreens)
+            {
+                if (screen.WorkingArea.Contains(form.Bounds))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void CenterWindow()
+        {
+            var screen = Screen.PrimaryScreen;
+            if(screen != null) 
+            {
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point
+                (
+                    screen.WorkingArea.Left + (screen.WorkingArea.Width / 2),
+                    screen.WorkingArea.Top + (screen.WorkingArea.Height / 2)
+                );
+
+            }
+
+        }
+
 
     }
 }

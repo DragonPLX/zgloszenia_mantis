@@ -17,7 +17,12 @@ namespace zgloszenia_mantis
 
         readonly File file;
 
-        Label labelPath;
+        Label labelPath = new Label
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            MaximumSize = new Size(255, 0)
+        };
         public FilePanel()
         {
             file = new File(this);
@@ -32,14 +37,7 @@ namespace zgloszenia_mantis
                 RowCount = 3,
                 ColumnCount = 2
             };
-
-            labelPath = new Label
-            {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                MaximumSize = new Size(255, 0)
-            };
-
+            
             UpdateLabelPath();
             GenerateButton();
 
@@ -60,7 +58,7 @@ namespace zgloszenia_mantis
 
         public void UpdateLabelPath()
         {
-            File.FilePath = Path.Combine(file.DefaultPath, file.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
+            File.FilePath = Path.Combine(File.DefaultPath, File.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
             labelPath.Text = File.FilePath;
         }
         private void GenerateButton()
