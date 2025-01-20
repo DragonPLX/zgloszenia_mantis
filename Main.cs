@@ -21,7 +21,7 @@ namespace zgloszenia_mantis
             Activated += (s, e) => Focus();
             Controls.Add(new MainFrame { Dock = DockStyle.Fill});
             Size = new Size(600, 550);
-
+            TimerToNextDay timer = new TimerToNextDay();
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
 

@@ -11,18 +11,16 @@ namespace zgloszenia_mantis
     public class DescriptionPanel : Panel
     {
 
-        public event EventHandler SaveDataButtonClicked;
-        public event EventHandler ResetStoperChanging;
-        
-        public readonly Description description = new Description();
+
+        public readonly Description description;
 
         ClientManager clientManager = new ClientManager();
-        public bool IsFile { get; private set; }
-        ComboBox comboBox;
-        TextBox textBox;
+        
+        public ComboBox comboBox;
+        public TextBox textBox;
         public DescriptionPanel()
         {
-            
+            description = new Description(this);
             GenerateLayout();
             ClientManager.ClientsChanged += (o, e) =>
             {
@@ -32,6 +30,7 @@ namespace zgloszenia_mantis
                 Refresh();
             };
         }
+
 
         private void GenerateLayout()
         {
@@ -83,7 +82,7 @@ namespace zgloszenia_mantis
             };
 
             changeClients.Click += (o, e) => description.ChangeClients(clientManager);
-            saveData.Click += SavedClicked;
+            saveData.Click += description.SavedClicked;
 
             flowLayoutPanel.Controls.Add(changeClients);
             flowLayoutPanel.Controls.Add(saveData);
@@ -102,19 +101,13 @@ namespace zgloszenia_mantis
 
 
         }
-        public void SavedClicked(object sender, EventArgs e)
+
+        public void ResetData()
         {
-            SaveDataButtonClicked?.Invoke(sender, e);
-            description.Client = comboBox.SelectedItem.ToString();
-            description.DescriptionOfReports = textBox.Text;
-            IsFile = description.SaveData();
-            if (IsFile)
-            {
-                ResetStoperChanging?.Invoke(sender,e);
-                comboBox.SelectedIndex = 0;
-                textBox.Clear();
-            }
+            textBox.Text = string.Empty;
+            comboBox.SelectedIndex = 0;
         }
+        
 
         
     }

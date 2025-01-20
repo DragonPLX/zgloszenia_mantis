@@ -11,6 +11,8 @@ namespace zgloszenia_mantis
 {
     public class Stoper 
     {
+        public event EventHandler ResetTimer;
+
         private int hour = 0, minute = 0, second = 0;
         private readonly static List<Stoper> stopers = new List<Stoper>();
 
@@ -40,6 +42,7 @@ namespace zgloszenia_mantis
             }
             timer = null;
             stoperPanel.Start.Text = "Start";
+            ResetTimer?.Invoke(this, EventArgs.Empty);
             UpdateShowTime();
         }
 

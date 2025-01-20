@@ -47,9 +47,11 @@ namespace zgloszenia_mantis
             {
                 Dock = DockStyle.Fill
             };
+
             stoperPanel.Stop.Click += Stop_Click;
-            descriptionPanel.SaveDataButtonClicked += BindingDataGetTime;
-            descriptionPanel.ResetStoperChanging += DescriptionPanel_ResetStoperChanging;
+            descriptionPanel.description.SaveDataButtonClicked += BindingDataGetTime;
+            descriptionPanel.description.ResetStoperChanging += DescriptionPanel_ResetStoperChanging;
+            stoperPanel.stoper.ResetTimer += Stoper_ResetTimer;
 
             for (int i = 0; i < tableLayoutPanel.ColumnCount; i++)
             {
@@ -73,6 +75,11 @@ namespace zgloszenia_mantis
             Controls.Add(tableLayoutPanel);
         }
 
+        private void Stoper_ResetTimer(object sender, EventArgs e)
+        {
+            descriptionPanel.ResetData();
+        }
+
         private void DescriptionPanel_ResetStoperChanging(object sender, EventArgs e)
         {
             stoperPanel.stoper.ResetStoper();
@@ -80,7 +87,7 @@ namespace zgloszenia_mantis
 
         private void Stop_Click(object sender, EventArgs e)
         {
-            descriptionPanel.SavedClicked(sender, e);
+            descriptionPanel.description.SavedClicked(sender, e);
         }
 
         private void BindingDataGetTime(object o, EventArgs e)

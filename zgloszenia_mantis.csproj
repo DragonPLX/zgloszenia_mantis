@@ -99,6 +99,7 @@
     <Compile Include="StoperPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TimerToNextDay.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
