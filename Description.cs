@@ -78,10 +78,12 @@ namespace zgloszenia_mantis
         {
             SaveDataButtonClicked?.Invoke(this, EventArgs.Empty);
             
-            if(descriptionPanel != null) {
+            if(descriptionPanel != null && descriptionPanel.comboBox.SelectedItem != null && descriptionPanel.comboBox.SelectedItem.ToString() != String.Empty ) 
+            {
                 Client = descriptionPanel.comboBox.SelectedItem.ToString();
                 DescriptionOfReports = descriptionPanel.textBox.Text;
-            }
+            }else
+                return false;
 
 
             try

@@ -22,12 +22,12 @@ namespace zgloszenia_mantis
                 Debug.WriteLine("Sprawdzam czas");
                 TimeSpan timeSpan = DateTime.Today.AddDays(1) - DateTime.Now;
 
-                if(timeSpan <= TimeSpan.FromMinutes(60))
+                if(timeSpan <= TimeSpan.FromHours(1))
                 {
                     Description.SaveDataForAll();
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromMinutes(5));
             }
         }
     }

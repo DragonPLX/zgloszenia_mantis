@@ -12,7 +12,7 @@ namespace zgloszenia_mantis
     {
 
 
-        public readonly Description description;
+        public Description description;
 
         ClientManager clientManager = new ClientManager();
         
@@ -22,6 +22,7 @@ namespace zgloszenia_mantis
         {
             description = new Description(this);
             GenerateLayout();
+           
             ClientManager.ClientsChanged += (o, e) =>
             {
                 Debug.WriteLine("Ustawiam comboBoxa");
@@ -80,6 +81,8 @@ namespace zgloszenia_mantis
                 Text = "Zapisz",
                 
             };
+
+            
 
             changeClients.Click += (o, e) => description.ChangeClients(clientManager);
             saveData.Click += description.SavedClicked;
