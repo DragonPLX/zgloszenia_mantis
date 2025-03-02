@@ -14,7 +14,7 @@ namespace zgloszenia_mantis
 
         public Description description;
 
-        ClientManager clientManager = new ClientManager();
+        private ClientManager clientManager = new ClientManager();
         
         public ComboBox comboBox;
         public TextBox textBox;
@@ -25,7 +25,6 @@ namespace zgloszenia_mantis
            
             ClientManager.ClientsChanged += (o, e) =>
             {
-                Debug.WriteLine("Ustawiam comboBoxa");
                 comboBox.DataSource = null;
                 comboBox.DataSource = clientManager.Clients;
                 Refresh();

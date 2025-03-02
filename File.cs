@@ -12,7 +12,7 @@ namespace zgloszenia_mantis
 {
     public class File
     {
-        public static string DefaultPath { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static string DirectoryPath { get; private set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
         public static DateTime Today { get; private set; } = DateTime.Today;
 
@@ -43,7 +43,7 @@ namespace zgloszenia_mantis
                 try
                 {
                     StreamWriter _writer = new StreamWriter(pathFile);
-                    _writer.WriteLine(DefaultPath);
+                    _writer.WriteLine(DirectoryPath);
                     _writer.Close();
                     Debug.WriteLine($"Zapisałem plik ze ścieżką: {pathFile}");
                 }
@@ -56,7 +56,7 @@ namespace zgloszenia_mantis
             try
             {
                 StreamReader _reader = new StreamReader(pathFile);
-                DefaultPath = _reader.ReadLine();
+                DirectoryPath = _reader.ReadLine();
                 _reader.Close();
             }
             catch (Exception)
@@ -89,9 +89,11 @@ namespace zgloszenia_mantis
 
         public void SaveFile()
         {
-            if (!Directory.Exists(Path.Combine(DefaultPath, MonthFolder)))
+            string filePath = Path.Combine(DirectoryPath, MonthFolder);
+
+            if (!Directory.Exists(filePath))
             {
-                Directory.CreateDirectory(Path.Combine(DefaultPath, MonthFolder));
+                Directory.CreateDirectory(filePath);
             }
 
             try
@@ -100,7 +102,7 @@ namespace zgloszenia_mantis
                 {
                     System.IO.File.Create(FilePath).Dispose();
                     Debug.WriteLine(FilePath);
-                    MessageBox.Show("Udało się zapisać plik.");
+                    
                 }
                 else
                 {
@@ -142,11 +144,11 @@ namespace zgloszenia_mantis
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                DefaultPath = dialog.SelectedPath;
+                DirectoryPath = dialog.SelectedPath;
                 try
                 {
                     StreamWriter stream = new StreamWriter(pathFile);
-                    stream.Write(DefaultPath);
+                    stream.Write(DirectoryPath);
                     stream.Close();
                 }
                 catch (Exception)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -47,9 +48,31 @@ namespace zgloszenia_mantis
 
             try
             {
-                StreamWriter writer = new StreamWriter(File.FilePath, true);
-                writer.WriteLine(Time + " " + Client + " " + DescriptionOfReports);
-                writer.Close();
+                string filePath = File.FilePath;
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    File file = new File();
+                    file.SaveFile();
+                }
+
+
+                if (new FileInfo(filePath).Length == 0)
+                {
+                    System.IO.File.AppendAllText(filePath, "[]");
+
+                }
+
+                var loadText = System.IO.File.ReadAllText(filePath);
+
+                var tasksArray = JsonConvert.DeserializeObject<List<MyTask>>(loadText) ?? new List<MyTask>();
+
+                MyTask myTask = new MyTask(Client, Time, DescriptionOfReports);
+
+                tasksArray.Add(myTask);
+
+                var json = JsonConvert.SerializeObject(tasksArray, Formatting.Indented);
+                System.IO.File.WriteAllText(filePath, json);
                 MessageBox.Show("Dane zostały zapisane", "Dane zostały zapisane", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return true;
 
@@ -88,15 +111,32 @@ namespace zgloszenia_mantis
 
             try
             {
-                if (!System.IO.File.Exists(File.FilePath))
+
+                string filePath = File.FilePath;
+
+                if (!System.IO.File.Exists(filePath))
                 {
                     File file = new File();
                     file.SaveFile();
                 }
+                
 
-                StreamWriter writer = new StreamWriter(File.FilePath, true);
-                writer.WriteLine(Time + " " + Client + " " + DescriptionOfReports);
-                writer.Close();
+                if (new FileInfo(filePath).Length == 0)
+                {
+                    System.IO.File.AppendAllText(filePath, "[]");
+
+                }
+
+                var loadText = System.IO.File.ReadAllText(filePath);
+
+                var tasksArray = JsonConvert.DeserializeObject<List<MyTask>>(loadText) ?? new List<MyTask>(); 
+
+                MyTask myTask = new MyTask(Client, Time, DescriptionOfReports);
+
+                tasksArray.Add(myTask);
+
+                var json = JsonConvert.SerializeObject(tasksArray, Formatting.Indented);
+                System.IO.File.WriteAllText(filePath, json);
 
                 ResetStoperChanging?.Invoke(this, EventArgs.Empty);
                 descriptionPanel.comboBox.SelectedIndex = 0;
@@ -107,7 +147,6 @@ namespace zgloszenia_mantis
             }
             catch (Exception)
             {
-
                 return false;
             }
 

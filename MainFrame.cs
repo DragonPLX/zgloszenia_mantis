@@ -10,14 +10,17 @@ namespace zgloszenia_mantis
 {
     public class MainFrame : TabControl
     {
-        readonly Frame tab1 = new Frame { Text = "Zad 1", Name="Frame" };
+        readonly Frame tab1 = new Frame() { Text = "Zad 1", Name = "Frame" };
         readonly TabPage plusTab = new TabPage { Text = "+", Name="plusTab" };
         readonly TabPage minusTab = new TabPage { Text = "-", Name="minusTab" };
+
+       
 
         TabPage _selectedTab;
         int _selectedTabIndexMinusOne;
         public MainFrame() 
         {
+
             Controls.Add(tab1);
             Controls.Add(plusTab);
             Controls.Add(minusTab);
@@ -53,7 +56,7 @@ namespace zgloszenia_mantis
 
         private void AddNewTab()
         {
-            Frame newTab = new Frame { Text = $"Zad {TabCount - 1}" };
+            Frame newTab = new Frame() { Text = $"Zad {TabCount - 1}" };
             TabPages.Insert(TabCount - 2, newTab);
             if (Options.IsYesStopOthersStopers) {
                 newTab.Stoper.stoper.StopAllOtherStopers();

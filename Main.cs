@@ -13,13 +13,21 @@ namespace zgloszenia_mantis
 {
     public partial class Main : Form
     {
+        
         public Main()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
             FormClosing += (s, e) => Application.Exit();
             Activated += (s, e) => Focus();
-            Controls.Add(new MainFrame { Dock = DockStyle.Fill});
+            MainMenu mainMenu = new MainMenu();
+            var report = new MenuItem("Raport");
+
+            mainMenu.MenuItems.Add(report);
+            Menu = mainMenu;
+            report.Click += (s, e) => new ReportFrame();
+            
+            Controls.Add(new MainFrame() { Dock = DockStyle.Fill});
             Size = new Size(600, 550);
             TimerToNextDay timer = new TimerToNextDay();
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;

@@ -43,7 +43,7 @@ namespace zgloszenia_mantis
                 Anchor = AnchorStyles.Left | AnchorStyles.Right,
                 Margin = new Padding(10, 0, 10, 0)
             };
-            descriptionPanel = new DescriptionPanel
+            descriptionPanel = new DescriptionPanel()
             {
                 Dock = DockStyle.Fill
             };

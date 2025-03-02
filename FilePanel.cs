@@ -13,7 +13,7 @@ namespace zgloszenia_mantis
     public class FilePanel : Panel
     {
 
-        private Button saveFile, changePath, openFile;
+        private Button saveFile, changePath, openFile, saveAllTasks;
 
         readonly File file;
 
@@ -34,7 +34,7 @@ namespace zgloszenia_mantis
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                RowCount = 3,
+                RowCount = 4,
                 ColumnCount = 2
             };
             
@@ -48,17 +48,19 @@ namespace zgloszenia_mantis
             tableLayoutPanel.Controls.Add(labelPath, 0, 0);
 
             tableLayoutPanel.Controls.Add(saveFile, 1, 1);
-            tableLayoutPanel.Controls.Add(openFile, 0, 2);
+            tableLayoutPanel.Controls.Add(openFile, 0, 3);
             tableLayoutPanel.Controls.Add(changePath, 0, 1);
+            tableLayoutPanel.Controls.Add(saveAllTasks, 0, 2);
             tableLayoutPanel.SetColumnSpan(labelPath, 2);
             tableLayoutPanel.SetColumnSpan(openFile, 2);
+            tableLayoutPanel.SetColumnSpan(saveAllTasks, 2);
 
             Controls.Add(tableLayoutPanel);
         }
 
         public void UpdateLabelPath()
         {
-            File.FilePath = Path.Combine(File.DefaultPath, File.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
+            File.FilePath = Path.Combine(File.DirectoryPath, File.MonthFolder, File.Today.ToString("yyyy-MM-dd") + ".txt");
             labelPath.Text = File.FilePath;
         }
         private void GenerateButton()
@@ -85,6 +87,14 @@ namespace zgloszenia_mantis
                 Dock = DockStyle.Fill
             };
             openFile.Click += (s, e) => file.OpenFile();
+
+            saveAllTasks = new Button
+            {
+                Text = "Zapisz wszystkie zadania",
+                Dock = DockStyle.Fill
+            };
+            saveAllTasks.Click += (s, e) => Description.SaveDataForAll();
+        
         }
 
     }
