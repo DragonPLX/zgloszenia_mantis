@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,6 +39,27 @@ namespace zgloszenia_mantis
 
         readonly string[] ArrayOfNameMonth = { "Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień" };
 
+        TableLayoutPanel mainLayout = new TableLayoutPanel()
+        {
+            Dock = DockStyle.Fill,
+            RowCount = 2
+        };
+
+
+        FlowLayoutPanel layout = new FlowLayoutPanel()
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            AutoSize = true
+
+        };
+
+        Panel panel = new Panel()
+        {
+            Dock = DockStyle.Fill,
+        };
 
         public ReportFrame()
         {
@@ -55,14 +77,7 @@ namespace zgloszenia_mantis
         {
             StartPosition = FormStartPosition.CenterScreen;
 
-            FlowLayoutPanel layout = new FlowLayoutPanel() 
-            {
-                FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = false,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                AutoSize = true
-                
-            };
+            
 
             yearComboBox = new ComboBox() 
             {
@@ -80,43 +95,70 @@ namespace zgloszenia_mantis
 
             };
 
-            Button generate = new Button()
+            Button generateButton = new Button()
             {
                 Text="Generuj"
             };
-            generate.Click += (s, e) => GenerateData();
+            generateButton.Click += (s, e) => GenerateData();
 
             monthComboBox.BindingContextChanged += (s, e) => monthComboBox.SelectedItem = NameMonth[DateTime.Today.Month];
 
-
-            DataGridView dataGridView = new DataGridView();
-
             
-
 
             layout.Controls.Add(yearComboBox);
             layout.Controls.Add(monthComboBox);
-            Controls.Add(layout);
-        
+            layout.Controls.Add(generateButton);
+            
+            mainLayout.Controls.Add(layout);
+            
+            
+            mainLayout.Controls.Add(panel);
+
+            Controls.Add(mainLayout);
         }
 
         void GenerateData()
         {
+            panel.Controls.Clear();
 
+            DataGridView dataGridView = new DataGridView()
+            {
+                Dock = DockStyle.Fill,
+                
+            };
+            var allTasks = LoadData((int)yearComboBox.SelectedItem, NameMonth.Single(m => m.Value == monthComboBox.SelectedItem.ToString()).Key);
+
+            var tasksGrouped = MyTask.JoinTasksInListTasksGroup(allTasks);
+            //dataGridView.AutoGenerateColumns = false;
+            dataGridView.DataSource = tasksGrouped;
+
+
+            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Client", HeaderText = "Klient" });
+            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Time", HeaderText = "Czas" });
+            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Description", HeaderText = "Opis", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+
+            dataGridView.DataBindingComplete += (s, e) => 
+            { 
+                //dataGridView.Columns[].Visible = false;
+                dataGridView.Columns[0].HeaderText = "Klient";
+                dataGridView.Columns[1].HeaderText = "Czas";
+                dataGridView.Columns[2].HeaderText = "Opis";
+                dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            };
+
+            panel.Controls.Add(dataGridView);
         }
 
 
         List<MyTask> LoadData(int year, int month)
         {
-            string fileSource;
+
 
             List<MyTask> myTasks = new List<MyTask>();
 
-            DirectoryInfo directory = new DirectoryInfo(Path.Combine(File.DirectoryPath,$"{year}-{month}"));
+            DirectoryInfo directory = new DirectoryInfo(Path.Combine(File.DirectoryPath,$"{year}-{month:d2}"));
 
             var files = directory.GetFiles();
-
-            string pattern = string.Join("|", clientManager.Clients.Select(Regex.Escape));
 
             foreach (var file in files) 
             {
@@ -124,12 +166,14 @@ namespace zgloszenia_mantis
                 {
                     try
                     {
-                        var contentOfFile = file.OpenText();
+                        var reader = file.OpenText();
 
-                        var text = contentOfFile.ReadToEnd();
+                        var jsonText = reader.ReadToEnd();
+                        reader.Close();
+                        
+                        var tasks = JsonConvert.DeserializeObject<List<MyTask>>(jsonText);
 
-                        var tasksInString = Regex.Split(text,pattern).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
-
+                        myTasks.AddRange(tasks);
                     }
                     catch (Exception ex) 
                     {
@@ -137,11 +181,11 @@ namespace zgloszenia_mantis
                     }
                 }
 
-
-
             }
 
+            
             return myTasks;
+
         }
 
         List<int> GenerateYears()
