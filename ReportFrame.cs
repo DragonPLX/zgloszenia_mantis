@@ -129,17 +129,11 @@ namespace zgloszenia_mantis
             var allTasks = LoadData((int)yearComboBox.SelectedItem, NameMonth.Single(m => m.Value == monthComboBox.SelectedItem.ToString()).Key);
 
             var tasksGrouped = MyTask.JoinTasksInListTasksGroup(allTasks);
-            //dataGridView.AutoGenerateColumns = false;
             dataGridView.DataSource = tasksGrouped;
 
 
-            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Client", HeaderText = "Klient" });
-            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Time", HeaderText = "Czas" });
-            //dataGridView.Columns.Add(new DataGridViewColumn() { DataPropertyName = "Description", HeaderText = "Opis", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-
             dataGridView.DataBindingComplete += (s, e) => 
             { 
-                //dataGridView.Columns[].Visible = false;
                 dataGridView.Columns[0].HeaderText = "Klient";
                 dataGridView.Columns[1].HeaderText = "Czas";
                 dataGridView.Columns[2].HeaderText = "Opis";
@@ -158,32 +152,33 @@ namespace zgloszenia_mantis
 
             DirectoryInfo directory = new DirectoryInfo(Path.Combine(File.DirectoryPath,$"{year}-{month:d2}"));
 
-            var files = directory.GetFiles();
+            if (directory.Exists) { 
+                var files = directory.GetFiles();
 
-            foreach (var file in files) 
-            {
-                if (file.Exists) 
+                foreach (var file in files) 
                 {
-                    try
+                    if (file.Exists) 
                     {
-                        var reader = file.OpenText();
+                        try
+                        {
+                            var reader = file.OpenText();
 
-                        var jsonText = reader.ReadToEnd();
-                        reader.Close();
+                            var jsonText = reader.ReadToEnd();
+                            reader.Close();
                         
-                        var tasks = JsonConvert.DeserializeObject<List<MyTask>>(jsonText);
+                            var tasks = JsonConvert.DeserializeObject<List<MyTask>>(jsonText);
 
-                        myTasks.AddRange(tasks);
+                            myTasks.AddRange(tasks);
+                        }
+                        catch (Exception ex) 
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
                     }
-                    catch (Exception ex) 
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
+
                 }
-
             }
 
-            
             return myTasks;
 
         }
