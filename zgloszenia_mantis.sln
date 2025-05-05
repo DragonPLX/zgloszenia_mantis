@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zgloszenia_mantis", "zgloszenia_mantis.csproj", "{32EC4882-CB6D-484F-9194-096F330C8182}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zgloszenia_mantis_wpf", "..\zgloszenia_mantis_wpf\zgloszenia_mantis_wpf.csproj", "{5A9D8BEE-694F-4B95-BE90-7C89B4B8B65A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{32EC4882-CB6D-484F-9194-096F330C8182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32EC4882-CB6D-484F-9194-096F330C8182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32EC4882-CB6D-484F-9194-096F330C8182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A9D8BEE-694F-4B95-BE90-7C89B4B8B65A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A9D8BEE-694F-4B95-BE90-7C89B4B8B65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A9D8BEE-694F-4B95-BE90-7C89B4B8B65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9D8BEE-694F-4B95-BE90-7C89B4B8B65A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

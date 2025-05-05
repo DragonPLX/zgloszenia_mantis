@@ -10,7 +10,10 @@ namespace zgloszenia_mantis
     {
         public string Client {  get; set; }
         public string Time { get; set; }
+
+        public string NumberOfTask {  get; set; }
         public string Description { get; set; }
+
     
         public MyTask(string client, string time, string description)
         {

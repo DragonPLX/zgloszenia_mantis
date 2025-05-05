@@ -17,7 +17,7 @@ namespace zgloszenia_mantis
         private ClientManager clientManager = new ClientManager();
         
         public ComboBox comboBox;
-        public TextBox textBox;
+        public TextBox textBox, numberOfTask;
         public DescriptionPanel()
         {
             description = new Description(this);
@@ -38,12 +38,12 @@ namespace zgloszenia_mantis
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 3
             };
 
 
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 75F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
 
             comboBox = new ComboBox
@@ -54,6 +54,14 @@ namespace zgloszenia_mantis
 
             };
 
+            numberOfTask = new TextBox 
+            {
+                Dock = DockStyle.Fill,
+                ScrollBars = ScrollBars.Vertical,
+                
+                
+            };
+
             textBox = new TextBox
             {
                 Dock = DockStyle.Fill,
@@ -61,6 +69,14 @@ namespace zgloszenia_mantis
                 ScrollBars = ScrollBars.Vertical,
                 ShortcutsEnabled = true
 
+            };
+
+            Label numberOrLinkTask = new Label() { Text = "Nr/link zgłoszenia: ", Dock = DockStyle.Fill};
+
+            FlowLayoutPanel taskLinkOrNumber = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                WrapContents = false
             };
 
             FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel
@@ -81,7 +97,9 @@ namespace zgloszenia_mantis
                 
             };
 
-            
+
+            taskLinkOrNumber.Controls.Add(numberOrLinkTask);
+            taskLinkOrNumber.Controls.Add(numberOfTask);
 
             changeClients.Click += (o, e) => description.ChangeClients(clientManager);
             saveData.Click += description.SavedClicked;
@@ -97,8 +115,9 @@ namespace zgloszenia_mantis
             };
 
             tableLayoutPanel.Controls.Add(comboBox, 0, 0);
-            tableLayoutPanel.Controls.Add(textBox, 0, 1);
-            tableLayoutPanel.Controls.Add(flowLayoutPanel, 0, 2);
+            tableLayoutPanel.Controls.Add(taskLinkOrNumber, 0, 1);
+            tableLayoutPanel.Controls.Add(textBox, 0, 2);
+            tableLayoutPanel.Controls.Add(flowLayoutPanel, 0, 3);
             Controls.Add(tableLayoutPanel);
 
 
